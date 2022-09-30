@@ -1,0 +1,17 @@
+server:
+  port: 10010
+
+spring:
+  application:
+    name: user-service
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver #mysql驱动
+    url: jdbc:mysql://121.4.105.24:3306/user?zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: root123456
+
+  cloud:
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8848
