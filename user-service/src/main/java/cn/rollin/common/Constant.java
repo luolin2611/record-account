@@ -1,7 +1,7 @@
-package cn.rollin.userservice.common;
+package cn.rollin.common;
 
 /**
- * description
+ * 常量类
  *
  * @author rollin
  * @since 2022-09-24 18:05:00
