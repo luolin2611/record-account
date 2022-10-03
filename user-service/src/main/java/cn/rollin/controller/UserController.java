@@ -2,6 +2,7 @@ package cn.rollin.controller;
 
 
 import cn.rollin.bean.dto.LoginReq;
+import cn.rollin.bean.dto.RegisterReq;
 import cn.rollin.bean.vo.UserVO;
 import cn.rollin.common.Constant;
 import cn.rollin.rest.Response;
@@ -45,6 +46,22 @@ public class UserController {
         String codeCacheKey = Util.getCacheKey(request, "0");
         UserVO userVO = userService.login(loginReq, codeCacheKey);
         return Response.buildSuccess(userVO);
+    }
+
+    /**
+     * 用户注册
+     *
+     * @param registerReq 请求参数
+     * @param request     request 对象
+     * @return
+     */
+    @PostMapping("/register")
+    public Response register(@RequestBody @Valid RegisterReq registerReq, HttpServletRequest request) {
+        log.info("enter UserController#register, Register userName is: {}", registerReq.getUserName());
+        // 获取验证码缓存key
+        String codeCacheKey = Util.getCacheKey(request, "1");
+        userService.register(registerReq, codeCacheKey);
+        return Response.buildSuccess();
     }
 }
 

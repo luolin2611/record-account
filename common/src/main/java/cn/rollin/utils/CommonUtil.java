@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 
 /**
  * 工具类
@@ -14,6 +15,11 @@ import java.security.NoSuchAlgorithmException;
  * @since 2022-10-02 23:28:23
  */
 public class CommonUtil {
+
+    /**
+     * 字符和数字，用于生成随机字符串
+     */
+    private static final String ALL_CHAR_NUM = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
     /**
      * MD5 加密
@@ -76,5 +82,20 @@ public class CommonUtil {
             ipAddress = "";
         }
         return ipAddress;
+    }
+
+    /**
+     * 获取随机字符的字符串(0-9a-z)
+     *
+     * @param length 长度
+     * @return 随机字符串
+     */
+    public static String getStringNumRandom(int length) {
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < length; i++) {
+            sb.append(ALL_CHAR_NUM.charAt(random.nextInt(ALL_CHAR_NUM.length())));
+        }
+        return sb.toString();
     }
 }

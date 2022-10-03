@@ -39,12 +39,17 @@ public enum ResStatusEnum {
     /**
      * 登录验证码过期，需要重新获取。
      */
-    LOGIN_VALID_CODE_OVER_DUE("010003", "登录验证码过期，请重新输入"),
+    LOGIN_VALID_CODE_OVER_DUE("010003", "验证码过期，请刷新后重新输入"),
 
     /**
      * 请输入正确验证码
      */
     INPUT_LOGIN_VALID_ERROR("010004", "请输入正确验证码"),
+
+    /**
+     * 注册用户已经存在
+     */
+    REGISTER_USER_REPEAT("010005", "注册用户已经存在"),
 
     /**
      * TODO 占坑使用后面清除
