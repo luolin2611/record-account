@@ -20,12 +20,36 @@ public enum ResStatusEnum {
      */
     FAILURE("999999", "Request failed, Try again later."),
 
+    /**
+     * 参数异常
+     */
+    PARAMER_EXCEPTION("000001", "Please pass in the required parameters."),
+
 
     /**
      * 用户不存在或登录密码错误
      */
-    LOGIN_FAIL("010001", "用户不存在或登录密码错误");
+    LOGIN_FAIL("010001", "用户不存在或登录密码错误"),
 
+    /**
+     * 登录验证码错误
+     */
+    LOGIN_VALID_ERROR("010002", "登录验证码错误"),
+
+    /**
+     * 登录验证码过期，需要重新获取。
+     */
+    LOGIN_VALID_CODE_OVER_DUE("010003", "登录验证码过期，请重新输入"),
+
+    /**
+     * 请输入正确验证码
+     */
+    INPUT_LOGIN_VALID_ERROR("010004", "请输入正确验证码"),
+
+    /**
+     * TODO 占坑使用后面清除
+     */
+    TEMP("000000", "占坑使用后面清除");
 
 
     /**

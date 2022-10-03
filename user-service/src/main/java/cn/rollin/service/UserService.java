@@ -1,9 +1,7 @@
 package cn.rollin.service;
 
 import cn.rollin.bean.dto.LoginReq;
-import cn.rollin.bean.model.UserDO;
 import cn.rollin.bean.vo.UserVO;
-import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * User Service
@@ -16,8 +14,9 @@ public interface UserService {
     /**
      * 用户登录
      *
-     * @param request 请求参数
+     * @param request      请求参数
+     * @param codeCacheKey 验证码缓存key
      * @return 响应对象
      */
-    UserVO login(LoginReq request);
+    UserVO login(LoginReq request, String codeCacheKey);
 }

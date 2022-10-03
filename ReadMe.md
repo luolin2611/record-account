@@ -3,7 +3,7 @@
 ```
 创建时间：2022-09-30 07:41:39
 描   述：本次的Api是对之前的研发进行重构
-技 术 栈：SpringBoot + SpringCloudAlibaba(Nacos)
+技 术 栈：SpringBoot、SpringCloudAlibaba(Nacos)、Mybatis Plus(自动生成代码且预置了一些增删改查)
 ```
 
 # 项目架构
