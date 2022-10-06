@@ -1,5 +1,7 @@
 package cn.rollin.utils;
 
+import org.springframework.beans.BeanUtils;
+
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -97,5 +99,17 @@ public class CommonUtil {
             sb.append(ALL_CHAR_NUM.charAt(random.nextInt(ALL_CHAR_NUM.length())));
         }
         return sb.toString();
+    }
+
+    /**
+     * 对象转换
+     *
+     * @param recoure 源对象
+     * @param target  目标对象
+     * @return 转换后的目标对象
+     */
+    public static <T, R> T copyProperties(R recoure, T target) {
+        BeanUtils.copyProperties(recoure, target);
+        return target;
     }
 }

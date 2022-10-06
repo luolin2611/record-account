@@ -1,13 +1,13 @@
 server:
-  port: 10012
+  port: 10014
 
 spring:
   application:
-    name: user-service
+    name: record-account-service
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver #mysql驱动
-    url: jdbc:mysql://121.4.105.24:3306/user?zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://121.4.105.24:3306/record_account?zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     password: root123456
 

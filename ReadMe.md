@@ -24,13 +24,63 @@
 
 
 
-## 微服务中间关系
+## 微服务之间关系
 
 <img src="folder/imgs/01.jpg" style="zoom: 60%">
 
 
 
 
+
+
+
+# 知识整理
+
+## mybatis-plus 使用技巧
+
+### 官网首页
+
+https://www.baomidou.com/
+
+### 条件构造器
+
+https://www.baomidou.com/pages/10c804/
+
+### 实战
+
+#### 题目
+
+根据用户id查询当月下，收入和支出的账单金额。
+
+#### 题目解析
+
+1.使用group by 对收入和支出进行分组。
+
+2.使用date_format方法指定请求年月。
+
+3.使用聚合函数sum求值。
+
+#### java代码
+
+```java
+DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMM", Locale.CHINA);
+String format = dtf.format(LocalDate.now());
+QueryWrapper<RecordAccountDO> objectQueryWrapper = new QueryWrapper<>();
+objectQueryWrapper.select("classify_type classifyType, SUM(bill_money) as money")
+        .apply("date_format(record_time, '%Y%m') = {0}", format)
+        .groupBy("classify_type");
+List<Map<String, Object>> maps = recordAccountMapper.selectMaps(objectQueryWrapper);
+```
+
+#### 等价于sql代码
+
+```sql
+SELECT classify_type classifyType, SUM(bill_money) as money FROM t_record_account WHERE (date_format(record_time, '%Y%m') = ?) GROUP BY classify_type
+```
+
+#### 响应结果
+
+<img src="folder/imgs/04.png" alt="image-20221006200328756" style="zoom:70%;" />
 
 
 
