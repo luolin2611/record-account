@@ -86,6 +86,112 @@ SELECT classify_type classifyType, SUM(bill_money) as money FROM t_record_accoun
 
 
 
+## JWT 相关
+
+jwt(Json Web Token)：jwt用于web与后台交互进行校验的token。
+
+### jwt 构成
+
+jwt由三部分构成，分别为头部、载荷、签名构成。三部分中间使用 ”.“ 进行分隔。
+
+```java
+JWTString=Base64(Header).Base64(Payload).HMACSHA256(base64UrlEncode(header)+"."+base64UrlEncode(payload),secret)
+```
+
+
+
+### 代码示例
+
+#### Java 代码
+
+```java
+String compact = Jwts.builder().setSubject("User Login Jwt Token")
+     .claim("userId", 45)
+     .claim("userName", "rollin")
+     .setIssuedAt(new Date())
+     .setExpiration(new Date(System.currentTimeMillis() + 2000))
+     .signWith(SignatureAlgorithm.HS256, "recordaccount.jwt.key")
+     .compact();
+```
+
+
+
+#### 运行结果
+
+<span style="color: #11ee01;">eyJhbGciOiJIUzI1NiJ9</span>.<span style="color: #ab04e5;">eyJzdWIiOiJVc2VyIExvZ2luIEp3dCBUb2tlbiIsInVzZXJJZCI6NDUsInVzZXJOYW1lIjoicm9sbGluIiwiaWF0IjoxNjY1MTE4OTE5LCJleHAiOjE2NjUxMTg5MjF9</span>.<span style="color: #a1a1a1;">p8XdYXk3-tIudJP8kQTnoCuF90iLIshb-gpisKmlY5o</span>
+
+### 示例剖析
+
+构成示例
+
+<img src="folder/imgs/05.jpg" style="zoom: 60%;" />
+
+#### Header 部分
+
+##### 源串
+
+```
+eyJhbGciOiJIUzI1NiJ9
+```
+
+##### decode 串
+
+```json
+{"alg":"HS256"}
+```
+
+#### 载荷部分
+
+##### 源串
+
+```
+eyJzdWIiOiJVc2VyIExvZ2luIEp3dCBUb2tlbiIsInVzZXJJZCI6NDUsInVzZXJOYW1lIjoicm9sbGluIiwiaWF0IjoxNjY1MTE4OTE5LCJleHAiOjE2NjUxMTg5MjF9
+```
+
+##### decode 串
+
+```json
+{"sub":"User Login Jwt Token","userId":45,"userName":"rollin","iat":1665118919,"exp":1665118921}
+```
+
+
+
+### Signature 签名部分
+
+```
+p8XdYXk3-tIudJP8kQTnoCuF90iLIshb-gpisKmlY5o
+```
+
+签名算法
+
+```java
+HMACSHA256(
+  base64UrlEncode(header) + "." + 
+  base64UrlEncode(payload),
+  secret
+)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

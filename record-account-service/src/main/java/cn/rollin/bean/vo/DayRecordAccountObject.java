@@ -17,11 +17,11 @@ public class DayRecordAccountObject implements Serializable {
     /**
      * 记账ID
      */
-    private Integer recordAccountId;
+    private Long recordAccountId;
     /**
      * 分类ID
      */
-    private Integer classifyId;
+    private Long classifyId;
     /**
      * 分类名称
      */

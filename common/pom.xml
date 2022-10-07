@@ -94,6 +94,12 @@
             <artifactId>jjwt</artifactId>
         </dependency>
 
+        <!-- jwt 依赖的 javax.xml.bind包在JDK8以上的版本被移除，所以此处需要引入 javax.xml.bind依赖 -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+        </dependency>
+
         <!--添加nacos客户端-->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -104,6 +110,12 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+
+        <!-- fastjson -->
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
         </dependency>
 
     </dependencies>

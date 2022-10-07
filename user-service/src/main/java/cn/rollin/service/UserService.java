@@ -2,7 +2,6 @@ package cn.rollin.service;
 
 import cn.rollin.bean.dto.LoginReq;
 import cn.rollin.bean.dto.RegisterReq;
-import cn.rollin.bean.vo.UserVO;
 
 /**
  * User Service
@@ -17,9 +16,9 @@ public interface UserService {
      *
      * @param request      请求参数
      * @param codeCacheKey 验证码缓存key
-     * @return 响应对象
+     * @return 登录token
      */
-    UserVO login(LoginReq request, String codeCacheKey);
+    String login(LoginReq request, String codeCacheKey);
 
     /**
      * 注册用户

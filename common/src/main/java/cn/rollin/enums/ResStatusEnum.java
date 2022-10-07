@@ -25,6 +25,10 @@ public enum ResStatusEnum {
      */
     PARAMER_EXCEPTION("000001", "Please pass in the required parameters."),
 
+    /**
+     * 鉴权失败
+     */
+    AUTHENTICATION_FAILED("000002", "Authentication failed."),
 
     /**
      * 用户不存在或登录密码错误

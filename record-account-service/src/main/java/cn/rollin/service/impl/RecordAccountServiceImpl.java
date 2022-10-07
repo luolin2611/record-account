@@ -4,7 +4,9 @@ import cn.rollin.bean.model.RecordAccountDO;
 import cn.rollin.bean.vo.DayRecordAccount;
 import cn.rollin.bean.vo.DayRecordAccountObject;
 import cn.rollin.bean.vo.home.HomeInitInfoVO;
+import cn.rollin.interceptor.LoginInterceptor;
 import cn.rollin.mapper.RecordAccountMapper;
+import cn.rollin.model.LoginUser;
 import cn.rollin.service.RecordAccountService;
 import cn.rollin.utils.CommonUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -39,12 +41,13 @@ public class RecordAccountServiceImpl implements RecordAccountService {
     @Override
     public HomeInitInfoVO getHomeInfo() {
         HomeInitInfoVO homeInitInfoVO = new HomeInitInfoVO();
+        LoginUser loginUser = LoginInterceptor.threadLocal.get();
 
         // 查询当月收入、支出总额和近三日账单总数 TODO 根据拦截器获取登录用户ID
-        queryHomeBillInfo(homeInitInfoVO, "45");
+        queryHomeBillInfo(homeInitInfoVO, loginUser.getUserId());
 
         // 查询近三日账单 TODO 根据拦截器获取登录用户ID
-        queryHomeBillList(homeInitInfoVO, "45");
+        queryHomeBillList(homeInitInfoVO, loginUser.getUserId());
 
         return homeInitInfoVO;
     }
@@ -55,7 +58,7 @@ public class RecordAccountServiceImpl implements RecordAccountService {
      * @param homeInitInfoVO 实体对象
      * @param userId         userId
      */
-    private void queryHomeBillInfo(HomeInitInfoVO homeInitInfoVO, String userId) {
+    private void queryHomeBillInfo(HomeInitInfoVO homeInitInfoVO, Long userId) {
         // 处理本月收入支出金额
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMM", Locale.CHINA);
         String dateStr = dtf.format(LocalDate.now());
@@ -65,7 +68,7 @@ public class RecordAccountServiceImpl implements RecordAccountService {
         maps.forEach(map -> {
             DecimalFormat decimalFormat = new DecimalFormat("0.00");
             String money = decimalFormat.format(map.get("money"));
-            if (ObjectUtils.notEqual("1", map.get("classifyType"))) {
+            if (ObjectUtils.notEqual("0", map.get("classifyType"))) {
                 // 收入
                 homeInitInfoVO.setMonthInTotal(Double.parseDouble(money));
             } else {
@@ -90,7 +93,7 @@ public class RecordAccountServiceImpl implements RecordAccountService {
      * @param homeInitInfoVO homeInitInfoVO
      * @param userId         userId
      */
-    private void queryHomeBillList(HomeInitInfoVO homeInitInfoVO, String userId) {
+    private void queryHomeBillList(HomeInitInfoVO homeInitInfoVO, Long userId) {
         String[] weekDays = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
         List<DayRecordAccount> threedayRecordAccount = new ArrayList<>();
 
@@ -107,7 +110,7 @@ public class RecordAccountServiceImpl implements RecordAccountService {
                 list.stream().collect(Collectors.groupingBy(item -> new SimpleDateFormat("yyyyMMdd").format(item.getRecordTime())));
         groupDataList.forEach((key, value) -> {
             DayRecordAccount dayRecordAccount = new DayRecordAccount();
-            //  [ 1月20 今天 ], [ 1月19 星期二 ]
+            //  [ 10月7 今天 ], [ 10月6 星期四 ]
             DateTimeFormatter parseDateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM月dd");
             LocalDate date = LocalDate.from(parseDateFormatter.parse(key));

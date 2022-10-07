@@ -28,7 +28,7 @@ public class UserDO implements Serializable {
      * 用户ID
      */
     @TableId(value = "user_id", type = IdType.AUTO)
-    private Integer userId;
+    private Long userId;
 
     /**
      * 用户名

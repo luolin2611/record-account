@@ -27,8 +27,8 @@ public class RecordAccountDO implements Serializable {
     /**
      * 记账ID
      */
-      @TableId(value = "record_account_id", type = IdType.AUTO)
-    private Integer recordAccountId;
+    @TableId(value = "record_account_id", type = IdType.AUTO)
+    private Long recordAccountId;
 
     /**
      * 账单金额
@@ -38,7 +38,7 @@ public class RecordAccountDO implements Serializable {
     /**
      * 分类ID
      */
-    private Integer classifyId;
+    private Long classifyId;
 
     /**
      * 分类名称
@@ -53,7 +53,7 @@ public class RecordAccountDO implements Serializable {
     /**
      * 用户ID
      */
-    private String userId;
+    private Long userId;
 
     /**
      * 描述信息

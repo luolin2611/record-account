@@ -3,22 +3,24 @@ package cn.rollin.service.impl;
 import cn.rollin.bean.dto.LoginReq;
 import cn.rollin.bean.dto.RegisterReq;
 import cn.rollin.bean.model.UserDO;
-import cn.rollin.bean.vo.UserVO;
 import cn.rollin.common.Constant;
+import cn.rollin.enums.JWTSubjectEnum;
 import cn.rollin.enums.ResStatusEnum;
 import cn.rollin.exception.BizException;
 import cn.rollin.mapper.UserMapper;
+import cn.rollin.model.LoginUser;
 import cn.rollin.service.UserService;
 import cn.rollin.utils.CommonUtil;
+import cn.rollin.utils.JWTUtil;
 import cn.rollin.utils.cache.ICachaService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.Md5Crypt;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -45,8 +47,17 @@ public class UserServiceImpl implements UserService {
     @Qualifier(value = "redisCacheSerivce")
     private ICachaService cachaService;
 
+    @Autowired
+    private JWTUtil jwtUtil;
+
+    /**
+     * AT 过期时间 (1小时)
+     */
+    @Value("${security.login.accessTokenExpiration}")
+    private Long accessTokenExpiration;
+
     @Override
-    public UserVO login(LoginReq request, String codeCacheKey) {
+    public String login(LoginReq request, String codeCacheKey) {
         log.info("enter UserServiceImpl#login method. Login account is: {}", request.getUserName());
         String loginTimesKey = String.format(Constant.LOGIN_TIMES_KEY, request.getUserName());
 
@@ -66,14 +77,17 @@ public class UserServiceImpl implements UserService {
             log.error("The user password is incorrect.");
             Optional<String> optional = cachaService.getOptional(loginTimesKey);
             int times = Integer.parseInt(optional.orElse("0")) + 1;
-            cachaService.set(loginTimesKey, String.valueOf(times), (long) Constant.LOGIN_ERROR_TIME_UNIT, TimeUnit.HOURS);
+            cachaService.set(
+                    loginTimesKey, String.valueOf(times), (long) Constant.LOGIN_ERROR_TIME_UNIT, TimeUnit.HOURS);
             throw new BizException(ResStatusEnum.LOGIN_FAIL);
         }
-        UserVO userVO = new UserVO();
-        BeanUtils.copyProperties(userDO, userVO);
         cachaService.delete(loginTimesKey);
-        log.info("UserServiceImpl#login end.");
-        return userVO;
+
+        // 生成 token 返回前端
+        LoginUser loginUser = new LoginUser();
+        CommonUtil.copyProperties(userDO, loginUser);
+        return jwtUtil.generateJwt(
+                JWTSubjectEnum.LOGIN_USER, accessTokenExpiration, loginUser);
     }
 
     @Override
@@ -98,7 +112,7 @@ public class UserServiceImpl implements UserService {
         }
         String salt = "$1$" + CommonUtil.getStringNumRandom(8);
         String password = Md5Crypt.md5Crypt(registerReq.getPassword().getBytes(StandardCharsets.UTF_8), salt);
-        userDO = UserDO.builder().userName(registerReq.getUserName()).salt(salt).password(password).build();
+        userDO = UserDO.builder().userName(registerReq.getUserName()).salt(salt).password(password).state("0").build();
         userMapper.insert(userDO);
 
         // 初始化用户信息

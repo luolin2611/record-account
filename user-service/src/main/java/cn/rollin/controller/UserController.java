@@ -3,7 +3,6 @@ package cn.rollin.controller;
 
 import cn.rollin.bean.dto.LoginReq;
 import cn.rollin.bean.dto.RegisterReq;
-import cn.rollin.bean.vo.UserVO;
 import cn.rollin.common.Constant;
 import cn.rollin.rest.Response;
 import cn.rollin.service.UserService;
@@ -40,12 +39,12 @@ public class UserController {
      * @return 响应对象
      */
     @PostMapping("/login")
-    public Response<UserVO> login(@RequestBody @Valid LoginReq loginReq, HttpServletRequest request) {
+    public Response<String> login(@RequestBody @Valid LoginReq loginReq, HttpServletRequest request) {
         log.info("enter UserController#login, login username is: {}", loginReq.getUserName());
         // 获取验证码缓存key
         String codeCacheKey = Util.getCacheKey(request, "0");
-        UserVO userVO = userService.login(loginReq, codeCacheKey);
-        return Response.buildSuccess(userVO);
+        String at = userService.login(loginReq, codeCacheKey);
+        return Response.buildSuccess(at);
     }
 
     /**
