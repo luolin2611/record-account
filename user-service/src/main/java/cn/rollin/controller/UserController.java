@@ -3,16 +3,14 @@ package cn.rollin.controller;
 
 import cn.rollin.bean.dto.LoginReq;
 import cn.rollin.bean.dto.RegisterReq;
+import cn.rollin.bean.vo.UserVO;
 import cn.rollin.common.Constant;
 import cn.rollin.rest.Response;
 import cn.rollin.service.UserService;
 import cn.rollin.utils.Util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -61,6 +59,12 @@ public class UserController {
         String codeCacheKey = Util.getCacheKey(request, "1");
         userService.register(registerReq, codeCacheKey);
         return Response.buildSuccess();
+    }
+
+    @GetMapping("/userinfo")
+    public Response<UserVO> queryUserInfo() {
+        log.info("enter UserController#queryUserInfo");
+        return Response.buildSuccess(userService.queryUserInfo());
     }
 }
 

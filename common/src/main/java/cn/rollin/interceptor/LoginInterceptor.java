@@ -47,7 +47,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         LoginUser loginUser = jwtUtil.parseJwt(csrfToken, LoginUser.class);
         if (ObjectUtils.isEmpty(loginUser)) {
             log.error("The csrfToken verification failed.");
-            throw new BizException(ResStatusEnum.AUTHENTICATION_FAILED);
+            throw new BizException(ResStatusEnum.LOGIN_TIME_OUT);
         }
         threadLocal.set(loginUser);
 

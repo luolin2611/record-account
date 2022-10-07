@@ -3,10 +3,12 @@ package cn.rollin.service.impl;
 import cn.rollin.bean.dto.LoginReq;
 import cn.rollin.bean.dto.RegisterReq;
 import cn.rollin.bean.model.UserDO;
+import cn.rollin.bean.vo.UserVO;
 import cn.rollin.common.Constant;
 import cn.rollin.enums.JWTSubjectEnum;
 import cn.rollin.enums.ResStatusEnum;
 import cn.rollin.exception.BizException;
+import cn.rollin.interceptor.LoginInterceptor;
 import cn.rollin.mapper.UserMapper;
 import cn.rollin.model.LoginUser;
 import cn.rollin.service.UserService;
@@ -117,6 +119,18 @@ public class UserServiceImpl implements UserService {
 
         // 初始化用户信息
         initUserInfo(registerReq.getUserName());
+    }
+
+    @Override
+    public UserVO queryUserInfo() {
+        LoginUser loginUser = LoginInterceptor.threadLocal.get();
+        UserDO userDO = userMapper.selectOne(new QueryWrapper<UserDO>().eq("user_id", loginUser.getUserId()));
+        if(ObjectUtils.isEmpty(userDO)) {
+            log.error("The user is no longer valid.");
+            throw new BizException(ResStatusEnum.USER_INVALID);
+        }
+        log.info("query user info success. userName is: {}", userDO.getUserName());
+        return CommonUtil.copyProperties(userDO, new UserVO());
     }
 
     /**

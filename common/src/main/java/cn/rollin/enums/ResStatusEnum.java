@@ -30,6 +30,8 @@ public enum ResStatusEnum {
      */
     AUTHENTICATION_FAILED("000002", "Authentication failed."),
 
+    LOGIN_TIME_OUT("000003", "Login timeout."),
+
     /**
      * 用户不存在或登录密码错误
      */
@@ -54,6 +56,11 @@ public enum ResStatusEnum {
      * 注册用户已经存在
      */
     REGISTER_USER_REPEAT("010005", "注册用户已经存在"),
+
+    /**
+     * 用户已经失效
+     */
+    USER_INVALID("010006", "用户已经失效"),
 
     /**
      * TODO 占坑使用后面清除
