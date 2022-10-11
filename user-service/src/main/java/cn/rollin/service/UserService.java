@@ -35,4 +35,9 @@ public interface UserService {
      * @return 用户信息对象
      */
     UserVO queryUserInfo();
+
+    /**
+     * 销户
+     */
+    void destroyAccount();
 }

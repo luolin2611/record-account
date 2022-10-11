@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -114,7 +115,10 @@ public class UserServiceImpl implements UserService {
         }
         String salt = "$1$" + CommonUtil.getStringNumRandom(8);
         String password = Md5Crypt.md5Crypt(registerReq.getPassword().getBytes(StandardCharsets.UTF_8), salt);
-        userDO = UserDO.builder().userName(registerReq.getUserName()).salt(salt).password(password).state("0").build();
+        userDO = UserDO.builder()
+                .userName(registerReq.getUserName()).salt(salt)
+                .password(password).state("0")
+                .updateTime(new Date()).build();
         userMapper.insert(userDO);
 
         // 初始化用户信息
@@ -125,12 +129,23 @@ public class UserServiceImpl implements UserService {
     public UserVO queryUserInfo() {
         LoginUser loginUser = LoginInterceptor.threadLocal.get();
         UserDO userDO = userMapper.selectOne(new QueryWrapper<UserDO>().eq("user_id", loginUser.getUserId()));
-        if(ObjectUtils.isEmpty(userDO)) {
+        if (ObjectUtils.isEmpty(userDO)) {
             log.error("The user is no longer valid.");
             throw new BizException(ResStatusEnum.USER_INVALID);
         }
         log.info("query user info success. userName is: {}", userDO.getUserName());
         return CommonUtil.copyProperties(userDO, new UserVO());
+    }
+
+    @Override
+    public void destroyAccount() {
+        // 删除 user-service 数据库。
+        LoginUser loginUser = LoginInterceptor.threadLocal.get();
+        userMapper.deleteById(loginUser.getUserId());
+        log.info("delete user success, userName is: {}", loginUser.getUserName());
+
+        // 使用Rebbit MQ 执行销户逻辑。
+        sendDestroyAccountMessage(loginUser.getUserId());
     }
 
     /**
@@ -177,12 +192,26 @@ public class UserServiceImpl implements UserService {
      * <h4>初始化用户信息</h4>
      * <p>1.访问record-account微服务初始化用户图标信息</p>
      * <p>2.可以选择两个方案来进行处理：</p>
-     * <p>2.1 RPC 方式</p>
-     * <p>2.2 延迟消息队列的方式 - 此处为了巩固技术栈，因此使用此方式，使用了Rabbit MQ</p>
+     * <p>2.1 RPC 方式 -- 本接口使用的方式</p>
+     * <p>2.2 延迟消息队列的方式</p>
      *
      * @param userName 用户名
      */
     private void initUserInfo(String userName) {
+        // TODO RPC record-account 微服务进行初始信息
+
+    }
+
+    /**
+     * <h4>发送销户消息</h4>
+     * <p>1.访问record-account微服务删除用户图标信息和用户记账信息</p>
+     * <p>2.可以选择两个方案来进行处理：</p>
+     * <p>2.1 RPC 方式</p>
+     * <p>2.2 延迟消息队列的方式 - 由于会有许多微服务需要用户信息，不可能每个微服务都RPC，因此此处使用MQ为最佳设计</p>
+     *
+     * @param userId userId
+     */
+    private void sendDestroyAccountMessage(Long userId) {
         // TODO 发送延迟消息队列到 record-account 微服务进行初始信息
 
     }

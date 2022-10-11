@@ -66,5 +66,17 @@ public class UserController {
         log.info("enter UserController#queryUserInfo");
         return Response.buildSuccess(userService.queryUserInfo());
     }
+
+    /**
+     * 销户
+     *
+     * @return 销户结果
+     */
+    @GetMapping("/destroyaccount")
+    public Response destroyAccount() {
+        log.info("enter UserController#destroyAccount");
+        userService.destroyAccount();
+        return Response.buildSuccess();
+    }
 }
 

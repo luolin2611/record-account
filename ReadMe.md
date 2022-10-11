@@ -10,6 +10,14 @@
 
 ## 微服务模块介绍
 
+### common 模块
+
+common作为模块，不是微服务，其作用大致如下。
+
+* 作为一般微服务的父pom，因此该pom依赖了一些常用的依赖库，例如springcloud、springboot、lombok等。
+* 作为多个微服务共同使用的工具类、bean集合，例如 Response<T>、Response.buildXXXX、ResStatusEnum等。
+* 一些框架工具也放在此模块中，比如鉴权的拦截工具类、自定义异常拦截等。
+
 ### gateway-service
 
 本服务作为所有微服务的网关服务。
@@ -29,6 +37,23 @@
 <img src="folder/imgs/01.jpg" style="zoom: 60%">
 
 
+
+# 系统设计
+
+## 销户系统设计
+
+销户一般请求的是用户微服务，进行删除账户，由于其它的微服务会设计到存储用户的信息，因此也需要同步删除其他微服务的用户信息；
+
+实现的方式有两种：
+
+* RPC 
+* 消息队列 MQ
+
+由于销户设计的微服务比较多，使用RPC的方式明显薄弱，因此选择MQ是最佳的选择。
+
+### 系统设计流程图
+
+<img src="folder/imgs/06.jpg" style="zoom: 60%">
 
 
 
