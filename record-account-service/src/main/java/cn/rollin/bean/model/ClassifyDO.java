@@ -15,7 +15,7 @@ import java.util.Date;
  * </p>
  *
  * @author rollin
- * @since 2022-10-06
+ * @since 2022-10-15
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -25,30 +25,40 @@ public class ClassifyDO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * id
+     * 分类id
      */
-      @TableId(value = "classify_user_id", type = IdType.AUTO)
-    private Integer classifyUserId;
+      @TableId(value = "classify_id", type = IdType.AUTO)
+    private Long classifyId;
+
+    /**
+     * 分类名称
+     */
+    private String classifyName;
+
+    /**
+     * 支付类型 (0-支出，1-收入)
+     */
+    private String type;
+
+    /**
+     * 分类类型 (0-预设，1-用户新增)
+     */
+    private String addType;
+
+    /**
+     * 图标ID
+     */
+    private Integer iconId;
 
     /**
      * 用户ID
      */
-    private Long userId;
-
-    /**
-     * 收入分类ID集合  1,2,3,4,5,6...
-     */
-    private String incomeClassifyIds;
-
-    /**
-     * 收入分类ID集合  1,2,3,4,5,6...
-     */
-    private String expenseClassifyIds;
+    private Integer userId;
 
     /**
      * 更新时间
      */
-    private Date updateTime;
+    private Date updatTime;
 
 
 }

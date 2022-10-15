@@ -61,6 +61,11 @@ public class UserController {
         return Response.buildSuccess();
     }
 
+    /**
+     * 查询用户信息
+     *
+     * @return UserVO
+     */
     @GetMapping("/userinfo")
     public Response<UserVO> queryUserInfo() {
         log.info("enter UserController#queryUserInfo");

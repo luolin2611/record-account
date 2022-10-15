@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author rollin
- * @since 2022-10-06
+ * @since 2022-10-15
  */
 public interface ClassifyMapper extends BaseMapper<ClassifyDO> {
 

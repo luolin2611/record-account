@@ -4,16 +4,18 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.rollin.bean.model.ClassifyDO">
-        <id column="classify_user_id" property="classifyUserId" />
+        <id column="classify_id" property="classifyId" />
+        <result column="classify_name" property="classifyName" />
+        <result column="type" property="type" />
+        <result column="add_type" property="addType" />
+        <result column="icon_id" property="iconId" />
         <result column="user_id" property="userId" />
-        <result column="income_classify_ids" property="incomeClassifyIds" />
-        <result column="expense_classify_ids" property="expenseClassifyIds" />
-        <result column="update_time" property="updateTime" />
+        <result column="updat_time" property="updatTime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        classify_user_id, user_id, income_classify_ids, expense_classify_ids, update_time
+        classify_id, classify_name, type, add_type, icon_id, user_id, updat_time
     </sql>
 
 </mapper>

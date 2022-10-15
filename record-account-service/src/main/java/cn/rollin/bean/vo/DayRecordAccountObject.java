@@ -2,7 +2,6 @@ package cn.rollin.bean.vo;
 
 import lombok.Data;
 
-import javax.swing.*;
 import java.io.Serializable;
 import java.util.Date;
 

@@ -42,14 +42,14 @@ common作为模块，不是微服务，其作用大致如下。
 
 ## 销户系统设计
 
-销户一般请求的是用户微服务，进行删除账户，由于其它的微服务会设计到存储用户的信息，因此也需要同步删除其他微服务的用户信息；
+销户一般请求的是用户微服务，进行删除账户，由于其它的微服务会涉及到存储用户的信息，因此也需要同步删除其他微服务的用户信息；
 
 实现的方式有两种：
 
 * RPC 
 * 消息队列 MQ
 
-由于销户设计的微服务比较多，使用RPC的方式明显薄弱，因此选择MQ是最佳的选择。
+由于销户涉及的微服务比较多，使用RPC的方式明显薄弱，因此选择MQ是最佳的选择。
 
 ### 系统设计流程图
 
@@ -71,7 +71,7 @@ https://www.baomidou.com/
 
 https://www.baomidou.com/pages/10c804/
 
-### 实战
+### 数据库分表查询
 
 #### 题目
 
@@ -108,6 +108,54 @@ SELECT classify_type classifyType, SUM(bill_money) as money FROM t_record_accoun
 <img src="folder/imgs/04.png" alt="image-20221006200328756" style="zoom:70%;" />
 
 
+
+### 联表查询的另一种体现
+
+记账(t_record_account)表中有一个字段分类ID(classifyId)，分类表中（t_classify）表中有一个字段图标ID(icon_id)。
+
+#### 实现目的
+
+通过t_record_account查询出记账列表 --> 通过 classifyId 查询对应分类 --> 通过 icon_id 查询对应的图标对象 --> 将icon对象放入，t_record_account。
+
+#### java代码
+
+```java
+private void handlerIcon(List<DayRecordAccountObject> dayRecordAccountObjects) {
+    List<Long> classifyIds = dayRecordAccountObjects.stream()
+            .map(DayRecordAccountObject::getClassifyId).collect(Collectors.toList());
+
+    // 从分类列表中剥离iconId，然后通过iconId 查训icon对象
+    List<ClassifyDO> classifyDOS = classifyMapper
+            .selectList(new QueryWrapper<ClassifyDO>().in("classify_id", classifyIds));
+    List<IconDO> iconDOS = iconMapper.selectList(new QueryWrapper<IconDO>()
+            .in("icon_id", classifyDOS.stream().map(ClassifyDO::getIconId).collect(Collectors.toList())));
+
+    // 剥离出 (classifyId, icon对象)
+    List<Map<Long, Icon>> iconMaps = classifyDOS.stream().flatMap(classifyDO -> iconDOS.stream()
+                    .filter(iconDO -> !ObjectUtils.notEqual(iconDO.getIconId(), classifyDO.getIconId()))
+                    .map(iconDO -> {
+                        // map存放 （classifyId, Icon对象）
+                        Map<Long, Icon> map = new HashMap<>();
+                        map.put(classifyDO.getClassifyId(), CommonUtil.copyProperties(iconDO, new Icon()));
+                        return map;
+                    }))
+            .collect(Collectors.toList());
+
+    // 把icon对象塞入 DayRecordAccountObject 对象中
+    dayRecordAccountObjects.forEach(dayRecordAccountObject -> {
+        Optional<Icon> iconOptional = iconMaps.stream()
+                .filter(iconMap -> ObjectUtils.isNotEmpty(iconMap.get(dayRecordAccountObject.getClassifyId())))
+                .map(iconMap -> iconMap.get(dayRecordAccountObject.getClassifyId())).findAny();
+        dayRecordAccountObject.setIcon(iconOptional.orElse(null));
+    });
+}
+```
+
+#### 核心点
+
+1.通过classifyId查询出来的icon对象，使用map对象将 key=classifyId，value=iconObject 进行存储。
+
+2.通过dayRecordAccountObjects遍历出来的对象进行添加icon图标对象。
 
 
 
