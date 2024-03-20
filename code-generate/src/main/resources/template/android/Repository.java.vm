@@ -1,0 +1,125 @@
+package ${package}.repository;
+
+import android.app.Application;
+import android.os.AsyncTask;
+import android.text.TextUtils;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.sqlite.db.SimpleSQLiteQuery;
+import androidx.sqlite.db.SupportSQLiteQuery;
+
+import ${package}.api.RetrofitManager;
+import ${package}.api.http.RxAdapter;
+import ${package}.api.service.${className}Service;
+import ${package}.db.AppDatabase;
+import ${package}.db.dao.${className}Dao;
+import ${package}.db.entity.${className};
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class ${className}Repository {
+    private ${className}Dao dao;
+    private LiveData<List<${className}>> all${className}s;
+    private ${className}Service service;
+
+    public ${className}Repository(Application application) {
+        AppDatabase database = AppDatabase.getDb(application);
+        dao = database.getDao(${className}Dao.class);
+        service = RetrofitManager.getInstance().getService(${className}Service.class);
+        all${className}s = dao.getAll();
+    }
+
+    public LiveData<${className}> insert(${className} model) {
+        dao.insert(model);
+        service.add(model)
+                .compose(RxAdapter.schedulersTransformer())
+                .compose(RxAdapter.exceptionTransformer());
+        MutableLiveData<${className}> ${classname} = new MutableLiveData<${className}>();
+        ${classname}.postValue(model);
+        return ${classname};
+    }
+
+    public LiveData<List<${className}>> insertBatch(${className}... models) {
+        dao.insertBatch(models);
+        service.addBatch(Arrays.asList(models))
+                .compose(RxAdapter.schedulersTransformer())
+                .compose(RxAdapter.exceptionTransformer());
+        MutableLiveData<List<${className}>> ${classname}s = new MutableLiveData<List<${className}>>();
+        ${classname}s.postValue(Arrays.asList(models));
+        return ${classname}s;
+    }
+
+    public void update(${className} model) {
+        dao.update(model);
+        service.edit(model)
+                .compose(RxAdapter.schedulersTransformer())
+                .compose(RxAdapter.exceptionTransformer());
+    }
+
+    public int updateBatch(${className}... models) {
+        int updateNum = dao.updateBatch(models);
+        service.editBatch(Arrays.asList(models))
+                .compose(RxAdapter.schedulersTransformer())
+                .compose(RxAdapter.exceptionTransformer());
+        return updateNum;
+    }
+
+    public int delete(${className} model) {
+        int deleteNum = dao.delete(model);
+        service.delete(model.getId())
+                .compose(RxAdapter.schedulersTransformer())
+                .compose(RxAdapter.exceptionTransformer());
+        return deleteNum;
+    }
+
+    public void deleteById(String id) {
+        dao.deleteById(id);
+        service.delete(id)
+                .compose(RxAdapter.schedulersTransformer())
+                .compose(RxAdapter.exceptionTransformer());
+    }
+
+    public void deleteBatch(${className}... models) {
+        List<String> ids = new ArrayList<>();
+        for(${className} model: models) {
+            ids.add(model.getId());
+        }
+        dao.deleteBatch(ids.toArray(new String[0]));
+        service.deleteBatch(TextUtils.join(",", ids))
+                .compose(RxAdapter.schedulersTransformer())
+                .compose(RxAdapter.exceptionTransformer());
+    }
+
+    public void deleteBatchByIds(String... ids) {
+        dao.deleteBatch(ids);
+        service.deleteBatch(TextUtils.join(",", ids))
+                .compose(RxAdapter.schedulersTransformer())
+                .compose(RxAdapter.exceptionTransformer());
+    }
+
+    public void deleteAll() {
+        dao.deleteAll();
+    }
+
+    public LiveData<List<${className}>> getAll() {
+        all${className}s = dao.getAll();
+        return all${className}s;
+    }
+
+    public LiveData<${className}> getById(String id) {
+        return dao.getById(id);
+    }
+
+    public LiveData<List<${className}>> getByIds(String[] ids) {
+        return dao.getByIds(ids);
+    }
+
+    public LiveData<List<${className}>> query(String sql) {
+        SupportSQLiteQuery query = new SimpleSQLiteQuery(sql);
+        return dao.query(query);
+    }
+}

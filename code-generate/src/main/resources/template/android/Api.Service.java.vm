@@ -1,0 +1,48 @@
+package ${package}.api.service;
+
+import ${package}.api.dto.RespDTO;
+import ${package}.db.entity.${className};
+
+import java.util.*;
+import io.reactivex.Observable;
+import retrofit2.http.Body;
+import retrofit2.http.DELETE;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Query;
+
+public interface ${className}Service {
+    @GET("/api/${classname}/list")
+    Observable<RespDTO<List<${className}>>> queryPageList(@Query("pageNo") Integer pageNo, @Query("pageSize") Integer pageSize);
+
+    @GET("/api/${classname}/queryById")
+    Observable<RespDTO<${className}>> queryById(@Query("id") String id);
+
+    @POST("/api/${classname}/add")
+    Observable<RespDTO<${className}>> add(@Body ${className} ${classname});
+
+    @POST("/api/${classname}/addBatch")
+    Observable<RespDTO<List<${className}>>> addBatch(@Body Collection<${className}> ${classname}s);
+
+    @PUT("/api/${classname}/edit")
+    Observable<RespDTO<${className}>> edit(@Body ${className} ${classname});
+
+    @PUT("/api/${classname}/editBatch")
+    Observable<RespDTO<List<${className}>>> editBatch(@Body Collection<${className}> ${classname}s);
+
+    @DELETE("/api/${classname}/delete")
+    Observable<RespDTO<Void>> delete(@Query("id") String id);
+
+    @DELETE("/api/${classname}/deleteBatch")
+    Observable<RespDTO<Void>> deleteBatch(@Query("ids") String ids);
+
+    @GET("/api/${classname}/downExcelTemplate")
+    Observable<RespDTO<Void>> downExcelTemplate();
+
+    @GET("/api/${classname}/exportExcel")
+    Observable<RespDTO<Void>> exportExcel();
+
+    @POST("/api/${classname}/importExcel")
+    Observable<RespDTO<Void>> importExcel();
+}

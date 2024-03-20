@@ -120,8 +120,6 @@
                 <artifactId>fastjson2</artifactId>
                 <version>${fastjson.version}</version>
             </dependency>
-
-
         </dependencies>
     </dependencyManagement>
 

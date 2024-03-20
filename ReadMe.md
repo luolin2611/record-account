@@ -247,13 +247,92 @@ HMACSHA256(
 
 
 
+## Java 基础知识使用技巧
+
+### 在Java Bean中在Getter方法中使用技巧
+
+#### 代码
+
+```java
+public class CartVO {
+    /**
+     * 购物项
+     */
+    private List<CartItemVO> cartItems;
 
 
+    /**
+     * 购买总件数
+     */
+    private Integer totalNum;
+
+    /**
+     * 购物车总价格
+     */
+    private BigDecimal totalPrice;
+
+    /**
+     * 购物车实际支付价格
+     */
+    private BigDecimal realPayPrice;
 
 
+    /**
+     * 总件数
+     * @return
+     */
+    public Integer getTotalNum() {
+        if(this.cartItems!=null){
+            int total = cartItems.stream().mapToInt(CartItemVO::getBuyNum).sum();
+            return total;
+        }
+        return 0;
+    }
 
+    /**
+     * 总价格
+     * @return
+     */
+    public BigDecimal getTotalPrice() {
+        BigDecimal amount = new BigDecimal("0");
+        if(this.cartItems!=null){
+            for(CartItemVO cartItemVO : cartItems){
+                BigDecimal itemTotalAmount =  cartItemVO.getTotalAmount();
+                amount = amount.add(itemTotalAmount);
+            }
+        }
+        return amount;
+    }
 
+    /**
+     * 购物车里面实际支付的价格
+     * @return
+     */
+    public BigDecimal getRealPayPrice() {
+        BigDecimal amount = new BigDecimal("0");
+        if(this.cartItems!=null){
+            for(CartItemVO cartItemVO : cartItems){
+                BigDecimal itemTotalAmount =  cartItemVO.getTotalAmount();
+                amount = amount.add(itemTotalAmount);
+            }
+        }
+        return amount;
+    }
 
+    public List<CartItemVO> getCartItems() {
+        return cartItems;
+    }
+
+    public void setCartItems(List<CartItemVO> cartItems) {
+        this.cartItems = cartItems;
+    }
+}
+
+```
+
+#### 解析
+
+通过自定义Getter方法，将List中的内容进行归并计算；例如通过cartItems 计算出 totalNum、 totalPrice、 realPayPrice。
 
 
 

@@ -17,9 +17,9 @@ import java.util.Date;
  * @since 2022-10-01 13:16:49
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@TableName("t_user")
 @Builder
+@TableName("t_user")
+@EqualsAndHashCode(callSuper = false)
 public class UserDO implements Serializable {
 
     private static final long serialVersionUID = 1L;

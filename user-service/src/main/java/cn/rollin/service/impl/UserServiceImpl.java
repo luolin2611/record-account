@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
         }
         cachaService.delete(codeCacheKey);
 
-        // 查询用户是否存在和插入用户信息
+        // 查询用户是否存在和插入用户信息 TODO 此处存在问题，当多线程执行下，会存在用户名重复问题
         UserDO userDO = userMapper.selectOne(new QueryWrapper<UserDO>().eq("user_name", registerReq.getUserName()));
         if (ObjectUtils.isNotEmpty(userDO)) {
             log.error("Registered user already exists.");

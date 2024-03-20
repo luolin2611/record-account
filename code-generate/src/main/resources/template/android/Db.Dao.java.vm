@@ -1,0 +1,11 @@
+package ${package}.db.dao;
+
+import androidx.room.Dao;
+
+import ${package}.db.BaseDao;
+import ${package}.db.entity.${className};
+
+@Dao
+public abstract class ${className}Dao extends BaseDao<${className}>{
+
+}

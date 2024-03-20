@@ -1,0 +1,16 @@
+package ${package}.entity;
+
+import lombok.Data;
+
+/**
+ * ${comments}
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+@Data
+public class ${className}{
+#foreach ($column in $columns)
+    public $column.attrType $column.lowerAttrName;
+#end
+}

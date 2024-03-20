@@ -1,0 +1,85 @@
+package ${package}.model;
+
+import android.app.Application;
+import android.content.Context;
+
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.LiveData;
+
+import ${package}.api.service.${className}Service;
+import ${package}.api.RetrofitManager;
+import ${package}.api.dto.RespDTO;
+import ${package}.api.http.RxAdapter;
+import ${package}.common.util.HmUtil;
+import ${package}.db.entity.${className};
+import ${package}.common.mvvm.model.BaseModel;
+import ${package}.repository.${className}Repository;
+import com.orhanobut.logger.Logger;
+
+
+import java.util.Collection;
+import java.util.List;
+
+import io.reactivex.Observable;
+
+/**
+ * 产品表
+ *
+ * @author huangzhuoran
+ * @date 2021-11-03 16:59:17
+ */
+public class ${className}Model extends BaseModel {
+    private ${className}Repository mRepository;
+    private ${className}Service m${className}Service;
+
+    public ${className}Model(Application application) {
+        super(application);
+        mRepository = new ${className}Repository(application);
+    }
+
+    public LiveData<${className}> add(${className} ${classname}) {
+        return mRepository.insert(${classname});
+    }
+
+    public LiveData<List<${className}>> addBatch(${className}... models) {
+        return mRepository.insertBatch(models);
+    }
+
+    public void edit(${className} ${classname}) {
+        mRepository.update(${classname});
+    }
+
+    public int editBatch(${className}... ${classname}s) {
+        return mRepository.updateBatch(${classname}s);
+    }
+
+    public void delete(String id) {
+        mRepository.deleteById(id);
+    }
+
+    public void deleteBatch(String... ids) {
+        mRepository.deleteBatchByIds(ids);
+    }
+
+    public void deleteAll(String ids) {
+        mRepository.deleteAll();
+    }
+
+    public LiveData<List<${className}>> getAll() {
+        return mRepository.getAll();
+    }
+
+    public LiveData<${className}> getById(String id) {
+        return mRepository.getById(id);
+    }
+
+    public LiveData<List<${className}>> getByIds(String... ids) {
+        return mRepository.getByIds(ids);
+    }
+
+    public LiveData<List<${className}>> queryPageList(String where, String order, Integer pageNo, Integer pageSize) {
+        String sql = HmUtil.buildSql("${classname}", where, order, pageNo, pageSize);
+        Logger.i("SQL: ", sql);
+        return mRepository.query(sql);
+    }
+}

@@ -8,8 +8,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver #mysql驱动
     url: jdbc:mysql://121.4.105.24:3306/record_account?zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
-    username: root
-    password: root123456
+    username: rollin
+    password: 123456
 
   redis:
     host: 121.4.105.24

@@ -1,0 +1,30 @@
+package ${package}.db.entity;
+
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import java.io.Serializable;
+
+import lombok.Data;
+
+/**
+ * ${comments}
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+@Data
+@Entity(tableName = "${tableName}")
+public class ${className} implements Serializable{
+#foreach ($column in $columns)
+
+#if($column.columnName == $pk.columnName)
+    @PrimaryKey
+    @NonNull
+#end
+    @ColumnInfo(name = "$column.columnName")
+    public $column.attrType $column.lowerAttrName;
+#end
+}

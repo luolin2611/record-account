@@ -1,0 +1,109 @@
+package ${package}.${moduleName}.entity;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import java.io.Serializable;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+#if(${isExcel})
+import org.jeecgframework.poi.excel.annotation.Excel;
+#end
+
+/**
+ * ${comments}
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+@Data
+@TableName("${tableName}")
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+@ApiModel(value="${tableName}对象", description="${comments}")
+public class ${className} {
+#foreach ($column in $columns)
+    /**
+#if($column.comments == '')
+    * $column.lowerAttrName
+#else
+    * $column.comments
+#end
+    */
+#if($column.columnName == $pk.columnName)
+    @TableId(value = "$column.columnName", type = IdType.$pkType)
+#if(${isExcel})
+#if($column.comments == '')
+    @Excel(name = "$column.lowerAttrName", width = 15)
+#else
+    @Excel(name = "$column.comments", width = 15)
+#end
+#end
+#if($column.comments == '')
+    @ApiModelProperty(value = "$column.lowerAttrName")
+#else
+    @ApiModelProperty(value = "$column.comments")
+#end
+    private $column.attrType $column.lowerAttrName;
+
+#elseif($column.dataType == 'date')
+#if(${isExcel})
+#if($column.comments == '')
+    @Excel(name = "$column.lowerAttrName", width = 15, format = "yyyy-MM-dd")
+#else
+    @Excel(name = "$column.comments", width = 15, format = "yyyy-MM-dd")
+#end
+#end
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+#if($column.comments == '')
+    @ApiModelProperty(value = "$column.lowerAttrName")
+#else
+    @ApiModelProperty(value = "$column.comments")
+#end
+    private $column.attrType $column.lowerAttrName;
+
+#elseif($column.dataType == 'timestamp' ||$column.dataType == 'datetime')
+#if(${isExcel})
+#if($column.comments == '')
+    @Excel(name = "$column.lowerAttrName", width = 20, format = "yyyy-MM-dd HH:mm:ss")
+#else
+    @Excel(name = "$column.comments", width = 20, format = "yyyy-MM-dd HH:mm:ss")
+#end
+#end
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+#if($column.comments == '')
+    @ApiModelProperty(value = "$column.lowerAttrName")
+#else
+    @ApiModelProperty(value = "$column.comments")
+#end
+    private $column.attrType $column.lowerAttrName;
+
+#else
+#if(${isExcel})
+#if($column.comments == '')
+    @Excel(name = "$column.lowerAttrName", width = 15)
+#else
+    @Excel(name = "$column.comments", width = 15)
+#end
+#end
+#if($column.columnName == 'del_flag')
+    @TableLogic
+#end
+#if($column.comments == '')
+    @ApiModelProperty(value = "$column.lowerAttrName")
+#else
+    @ApiModelProperty(value = "$column.comments")
+#end
+    private $column.attrType $column.lowerAttrName;
+
+#end
+#end
+}
