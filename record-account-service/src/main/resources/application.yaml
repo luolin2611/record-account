@@ -34,8 +34,10 @@ logging:
 
 # 定义 安全 相关
 security:
-  referers: http://127.0.0.1:10012/,http://127.0.0.1:10010/
+  refers: http://127.0.0.1:10012/,http://127.0.0.1:10010/
   jwt:
     prefix: recordaccount_
     expiration: 864000000 # 过期时间默认一天 (单位：ms) -- 86400000 = 1天 -- 此处给出10天
     secretKey: recordaccount.jwt.secretkey
+  aes:
+    secretKey: recordaccount.aes.secretkey

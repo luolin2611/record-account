@@ -20,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.Md5Crypt;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -46,11 +45,11 @@ public class UserServiceImpl implements UserService {
     @Resource
     private UserMapper userMapper;
 
-    @Autowired
+    @Resource
     @Qualifier(value = "redisCacheSerivce")
     private ICachaService cachaService;
 
-    @Autowired
+    @Resource
     private JWTUtil jwtUtil;
 
     /**

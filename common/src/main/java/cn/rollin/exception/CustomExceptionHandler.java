@@ -2,9 +2,9 @@ package cn.rollin.exception;
 
 import cn.rollin.rest.Response;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
 
 /**
  * 自定义异常处理
@@ -12,12 +12,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author rollin
  * @since 2022-10-01 23:02:48
  */
-@ControllerAdvice
 @Slf4j
+@RestControllerAdvice
 public class CustomExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
-    @ResponseBody
     public Response handler(Exception e) {
         log.error("Enter CustomExceptionHandler#handler.");
         Response response = Response.buildError();

@@ -34,10 +34,14 @@ logging:
 
 # 定义 安全 相关
 security:
-  referers: http://127.0.0.1:10012/,http://127.0.0.1:10010/
+  refers: http://127.0.0.1:10012/,http://127.0.0.1:10010/
   jwt:
     prefix: recordaccount_
     expiration: 86400000 # 过期时间默认一天 (单位：ms) -- 86400000 = 1天 -- 此处给出10天
     secretKey: recordaccount.jwt.secretkey
   login:
     accessTokenExpiration: 86400000 # AT 过期时间 - 1小时 = 3600000， 便于调试，此处暂时给出10天
+  aes:
+    secretKey: recordaccount.aes.secretkey
+  switchs:
+    swaggerEnable: true # 定义Swagger开关，生产环境关闭

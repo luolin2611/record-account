@@ -8,11 +8,6 @@ package cn.rollin.common;
  */
 public class Constant {
     /**
-     * User 模块请求地址映射
-     */
-    public static final String USER_V1_PATH = "/api/user/v1";
-
-    /**
      * 用户登录次数Key，%s 表示登录账户号
      */
     public static final String LOGIN_TIMES_KEY = "user-service:loginTimes:%s";

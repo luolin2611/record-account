@@ -1,6 +1,8 @@
 package cn.rollin.rest;
 
 import cn.rollin.enums.ResStatusEnum;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -12,28 +14,42 @@ import javax.validation.constraints.NotNull;
  * @since 2022-10-01 20:53:36
  */
 @Data
+@ApiModel("响应对象")
 public class Response<T> {
     /**
      * 响应码
      */
     @NotNull
+    @ApiModelProperty(value = "响应码")
     private String code;
 
     /**
      * 响应描述
      */
     @NotNull
+
+    @ApiModelProperty(value = "响应描述")
     private String message;
+
+    /**
+     * 时间戳
+     */
+    @NotNull
+    @ApiModelProperty(value = "时间戳")
+    private Long timestamp;
 
     /**
      * 响应实体
      */
+    @ApiModelProperty(value = "响应实体")
     private T body;
 
     private Response() {
+        this.timestamp = System.currentTimeMillis();
     }
 
     private Response(ResStatusEnum statusEnum) {
+        this.timestamp = System.currentTimeMillis();
         this.code = statusEnum.getCode();
         this.message = statusEnum.getMessage();
     }

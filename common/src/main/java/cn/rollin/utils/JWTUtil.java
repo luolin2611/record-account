@@ -28,6 +28,9 @@ public class JWTUtil {
     @Value("${security.jwt.secretKey}")
     private String jwtSecretKey;
 
+    @Value("${security.aes.secretKey}")
+    private String AES_SECRETKEY;
+
     /**
      * jwt 默认过期时间(单位：毫秒)
      */
@@ -55,17 +58,19 @@ public class JWTUtil {
      *
      * @param subjectEnum 主题枚举
      * @param expiration  jwt过期时间
-     * @param object      载荷部分对象
+     * @param t           载荷部分对象
      * @return jwt 字符串
      */
     public <T> String generateJwt(JWTSubjectEnum subjectEnum, Long expiration, T t) {
-        return tokenPrefix + Jwts.builder()
+        String token = Jwts.builder()
                 .setSubject(subjectEnum.getSubject())
                 .claim("object", t)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(SignatureAlgorithm.HS256, jwtSecretKey)
                 .compact();
+
+        return tokenPrefix + AESUtils.encrypt(token, AES_SECRETKEY);
     }
 
     /**
@@ -77,6 +82,7 @@ public class JWTUtil {
      */
     public <T> T parseJwt(String jwtStr, Class<T> tClass) {
         try {
+            jwtStr = AESUtils.decrypt(jwtStr, AES_SECRETKEY);
             Claims body = Jwts.parser()
                     .setSigningKey(jwtSecretKey)
                     .parseClaimsJws(jwtStr.replace(tokenPrefix, ""))

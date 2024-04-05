@@ -25,8 +25,8 @@ public class AuthInterceptor implements HandlerInterceptor {
     /**
      * 配置文件配置的Referers, 多个Referer之间用 "," 分隔
      */
-    @Value("${security.referers}")
-    private String referers;
+    @Value("${security.refers}")
+    private String refers;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -39,7 +39,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         // 校验Referer - 如果REFERERS中没有一个能匹配上请求的referer时，存在别请求源，进行拦截。
-        if (Arrays.stream(referers.split(",")).noneMatch(referer::startsWith)) {
+        if (Arrays.stream(refers.split(",")).noneMatch(refers::startsWith)) {
             log.error("The referer verification failed.");
             throw new BizException(ResStatusEnum.AUTHENTICATION_FAILED);
         }

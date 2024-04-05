@@ -9,6 +9,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
+import static cn.rollin.constant.Constant.SWAGGER_IGNORE_PREFIX;
+
 /**
  * 拦截器配置管理
  *
@@ -37,14 +39,16 @@ public class InterceptorConfig implements WebMvcConfigurer {
             "/api/user/*/user/register",
             "/api/user/*/checkcode/captcha");
 
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 添加鉴权拦截器
-        registry.addInterceptor(authInterceptor);
+        registry.addInterceptor(authInterceptor).excludePathPatterns(SWAGGER_IGNORE_PREFIX);
 
         // 添加登录校验拦截器
         registry.addInterceptor(loginInterceptor)
                 .addPathPatterns(pathPatterns)
-                .excludePathPatterns(excludePathPatterns);
+                .excludePathPatterns(excludePathPatterns)
+                .excludePathPatterns(SWAGGER_IGNORE_PREFIX);
     }
 }

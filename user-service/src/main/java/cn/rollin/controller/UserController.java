@@ -4,16 +4,21 @@ package cn.rollin.controller;
 import cn.rollin.bean.dto.LoginReq;
 import cn.rollin.bean.dto.RegisterReq;
 import cn.rollin.bean.vo.UserVO;
-import cn.rollin.common.Constant;
 import cn.rollin.rest.Response;
 import cn.rollin.service.UserService;
 import cn.rollin.utils.Util;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
+import static cn.rollin.constant.Constant.USER_PATH;
+
 
 /**
  * User Controller
@@ -23,7 +28,8 @@ import javax.validation.Valid;
  */
 @Slf4j
 @RestController
-@RequestMapping(Constant.USER_V1_PATH + "/user")
+@RequestMapping(USER_PATH + "/user")
+@Api(tags = "用户Controller", value = "用户Controller")
 public class UserController {
 
     @Autowired
@@ -37,7 +43,8 @@ public class UserController {
      * @return 响应对象
      */
     @PostMapping("/login")
-    public Response<String> login(@RequestBody @Valid LoginReq loginReq, HttpServletRequest request) {
+    @ApiOperation("用户登录")
+    public Response<String> login(@RequestBody @Valid @ApiParam(value = "登录请求参数") LoginReq loginReq, HttpServletRequest request) {
         log.info("enter UserController#login, login username is: {}", loginReq.getUserName());
         // 获取验证码缓存key
         String codeCacheKey = Util.getCacheKey(request, "0");
@@ -53,7 +60,8 @@ public class UserController {
      * @return
      */
     @PostMapping("/register")
-    public Response register(@RequestBody @Valid RegisterReq registerReq, HttpServletRequest request) {
+    @ApiOperation("用户注册")
+    public Response register(@RequestBody @Valid @ApiParam(value = "注册请求参数") RegisterReq registerReq, HttpServletRequest request) {
         log.info("enter UserController#register, Register userName is: {}", registerReq.getUserName());
         // 获取验证码缓存key
         String codeCacheKey = Util.getCacheKey(request, "1");
@@ -84,4 +92,3 @@ public class UserController {
         return Response.buildSuccess();
     }
 }
-

@@ -1,6 +1,5 @@
 package cn.rollin.controller;
 
-import cn.rollin.common.Constant;
 import cn.rollin.enums.ResStatusEnum;
 import cn.rollin.exception.BizException;
 import cn.rollin.utils.Util;
@@ -22,6 +21,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import static cn.rollin.constant.Constant.USER_PATH;
+
 /**
  * 验证码Controller
  *
@@ -30,7 +31,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @RestController
-@RequestMapping(Constant.USER_V1_PATH + "/checkcode")
+@RequestMapping(USER_PATH + "/checkcode")
 public class CheckCodeController {
     @Autowired
     private Producer captchaProducer;
@@ -55,7 +56,7 @@ public class CheckCodeController {
         log.info("enter CheckCodeController#getCaptcha");
         String type = request.getParameter("type");
         String codeCacheKey = Util.getCacheKey(request, type);
-        if(StringUtils.isBlank(type)) {
+        if (StringUtils.isBlank(type)) {
             log.error("Type cannot be empty.");
             throw new BizException(ResStatusEnum.PARAMER_EXCEPTION);
         }

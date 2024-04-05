@@ -336,7 +336,41 @@ public class CartVO {
 
 
 
+## Swagger集成
 
+### 原生集成
+
+#### 添加依赖
+
+```xml
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-boot-starter</artifactId>
+    <version>3.0.0</version>
+</dependency>
+```
+
+#### 访问地址
+
+> http://localhost:10012/swagger-ui/index.html
+
+
+
+### 集成knife4j
+
+#### 添加依赖
+
+```xml
+<dependency>
+    <groupId>com.github.xiaoymin</groupId>
+    <artifactId>knife4j-spring-boot-starter</artifactId>
+    <version>3.0.3</version>
+</dependency>
+```
+
+#### 访问地址
+
+> http://localhost:10012/doc.html
 
 
 
@@ -375,6 +409,8 @@ public class CartVO {
 ### 参考地址
 
 https://blog.csdn.net/JFENG14/article/details/123281224
+
+
 
 
 
