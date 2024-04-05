@@ -29,7 +29,7 @@ public class JWTUtil {
     private String jwtSecretKey;
 
     @Value("${security.aes.secretKey}")
-    private String AES_SECRETKEY;
+    private String aesSecretKey;
 
     /**
      * jwt 默认过期时间(单位：毫秒)
@@ -70,7 +70,7 @@ public class JWTUtil {
                 .signWith(SignatureAlgorithm.HS256, jwtSecretKey)
                 .compact();
 
-        return tokenPrefix + AESUtils.encrypt(token, AES_SECRETKEY);
+        return tokenPrefix + AESUtils.encrypt(token, aesSecretKey);
     }
 
     /**
@@ -82,7 +82,7 @@ public class JWTUtil {
      */
     public <T> T parseJwt(String jwtStr, Class<T> tClass) {
         try {
-            jwtStr = AESUtils.decrypt(jwtStr, AES_SECRETKEY);
+            jwtStr = AESUtils.decrypt(jwtStr, aesSecretKey);
             Claims body = Jwts.parser()
                     .setSigningKey(jwtSecretKey)
                     .parseClaimsJws(jwtStr.replace(tokenPrefix, ""))

@@ -61,7 +61,7 @@ public class SwaggerConfiguration {
     /**
      * 对管理端的接口文档
      *
-     * @return
+     * @return docket对象
      */
     @Bean
     public Docket adminApiDoc() {
@@ -96,7 +96,7 @@ public class SwaggerConfiguration {
     /**
      * 配置全局通用参数
      *
-     * @return
+     * @return docket对象
      */
     private List<RequestParameter> globalReqeustParameters() {
 

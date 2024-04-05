@@ -44,10 +44,6 @@ public class Response<T> {
     @ApiModelProperty(value = "响应实体")
     private T body;
 
-    private Response() {
-        this.timestamp = System.currentTimeMillis();
-    }
-
     private Response(ResStatusEnum statusEnum) {
         this.timestamp = System.currentTimeMillis();
         this.code = statusEnum.getCode();
@@ -91,7 +87,7 @@ public class Response<T> {
      * @param statusEnum 错误枚举
      * @return response 对象
      */
-    public static Response buildError(ResStatusEnum statusEnum) {
+    public static Response<Object> buildError(ResStatusEnum statusEnum) {
         return new Response<>(statusEnum);
     }
 }
