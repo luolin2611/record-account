@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class CustomExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
-    public Response handler(Exception e) {
+    public Response<Object> handler(Exception e) {
         log.error("Enter CustomExceptionHandler#handler.");
-        Response response = Response.buildError();
+        Response<Object> response = Response.buildError();
         if (e instanceof BizException) {
             // 自定义异常
             BizException exception = ((BizException) e);

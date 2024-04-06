@@ -57,7 +57,7 @@ public class UserController {
      *
      * @param registerReq 请求参数
      * @param request     request 对象
-     * @return
+     * @return 响应对象
      */
     @PostMapping("/register")
     @ApiOperation("用户注册")
