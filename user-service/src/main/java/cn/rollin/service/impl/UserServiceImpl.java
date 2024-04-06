@@ -15,6 +15,7 @@ import cn.rollin.service.UserService;
 import cn.rollin.utils.CommonUtil;
 import cn.rollin.utils.JWTUtil;
 import cn.rollin.utils.cache.ICachaService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.Md5Crypt;
@@ -57,6 +58,11 @@ public class UserServiceImpl implements UserService {
      */
     @Value("${security.login.accessTokenExpiration}")
     private Long accessTokenExpiration;
+
+    /**
+     * Salt 前缀
+     */
+    private final static String SALT_PREFIX = "$1$";
 
     @Override
     public String login(LoginReq request, String codeCacheKey) {
@@ -106,17 +112,19 @@ public class UserServiceImpl implements UserService {
         }
         cachaService.delete(codeCacheKey);
 
-        // 查询用户是否存在和插入用户信息 TODO 此处存在问题，当多线程执行下，会存在用户名重复问题
-        UserDO userDO = userMapper.selectOne(new QueryWrapper<UserDO>().eq("user_name", registerReq.getUserName()));
+        // 查询用户是否存在和插入用户信息
+        UserDO userDO = userMapper.selectOne(
+                new LambdaQueryWrapper<UserDO>().eq(UserDO::getUserName, registerReq.getUserName()));
         if (ObjectUtils.isNotEmpty(userDO)) {
             log.error("Registered user already exists.");
             throw new BizException(ResStatusEnum.REGISTER_USER_REPEAT);
         }
-        String salt = "$1$" + CommonUtil.getStringNumRandom(8);
+        String salt = SALT_PREFIX + CommonUtil.getStringNumRandom(8);
         String password = Md5Crypt.md5Crypt(registerReq.getPassword().getBytes(StandardCharsets.UTF_8), salt);
         userDO = UserDO.builder()
                 .userName(registerReq.getUserName()).salt(salt)
                 .password(password).state("0")
+                .createTime(new Date())
                 .updateTime(new Date()).build();
         userMapper.insert(userDO);
 

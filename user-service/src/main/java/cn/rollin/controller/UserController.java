@@ -11,9 +11,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -21,18 +21,18 @@ import static cn.rollin.constant.Constant.USER_PATH;
 
 
 /**
- * User Controller
+ * 用户Controller
  *
  * @author rollin
  * @since 2022-10-01
  */
 @Slf4j
 @RestController
+@Api(tags = "用户Controller")
 @RequestMapping(USER_PATH + "/user")
-@Api(tags = "用户Controller", value = "用户Controller")
 public class UserController {
 
-    @Autowired
+    @Resource
     private UserService userService;
 
     /**
@@ -61,7 +61,7 @@ public class UserController {
      */
     @PostMapping("/register")
     @ApiOperation("用户注册")
-    public Response register(@RequestBody @Valid @ApiParam(value = "注册请求参数") RegisterReq registerReq, HttpServletRequest request) {
+    public Response<Object> register(@RequestBody @Valid @ApiParam(value = "注册请求参数") RegisterReq registerReq, HttpServletRequest request) {
         log.info("enter UserController#register, Register userName is: {}", registerReq.getUserName());
         // 获取验证码缓存key
         String codeCacheKey = Util.getCacheKey(request, "1");
@@ -74,6 +74,7 @@ public class UserController {
      *
      * @return UserVO
      */
+    @ApiOperation("查询用户信息")
     @GetMapping("/userinfo")
     public Response<UserVO> queryUserInfo() {
         log.info("enter UserController#queryUserInfo");
@@ -85,8 +86,9 @@ public class UserController {
      *
      * @return 销户结果
      */
+    @ApiOperation("销户")
     @GetMapping("/destroyaccount")
-    public Response destroyAccount() {
+    public Response<Object> destroyAccount() {
         log.info("enter UserController#destroyAccount");
         userService.destroyAccount();
         return Response.buildSuccess();

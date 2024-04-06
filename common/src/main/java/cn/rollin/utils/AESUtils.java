@@ -4,6 +4,7 @@ import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author rollin
@@ -37,8 +38,8 @@ public class AESUtils {
                 byte[] raw = secretKey.getBytes();
                 SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
                 cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
-                encrypted = cipher.doFinal(plaintext.getBytes("utf-8"));
-                ciphertext = new String(new Base64().encode(encrypted));
+                encrypted = cipher.doFinal(plaintext.getBytes(StandardCharsets.UTF_8));
+                ciphertext = new String(Base64.encodeBase64(encrypted));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -55,9 +56,9 @@ public class AESUtils {
             SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, skeySpec);
-            byte[] encrypted1 = new Base64().decodeBase64(ciphertext);
+            byte[] encrypted1 = Base64.decodeBase64(ciphertext);
             byte[] original = cipher.doFinal(encrypted1);
-            plaintext = new String(original, "utf-8");
+            plaintext = new String(original, StandardCharsets.UTF_8);
         } catch (Exception e) {
             e.printStackTrace();
         }

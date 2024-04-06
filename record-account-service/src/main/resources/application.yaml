@@ -40,4 +40,4 @@ security:
     expiration: 864000000 # 过期时间默认一天 (单位：ms) -- 86400000 = 1天 -- 此处给出10天
     secretKey: recordaccount.jwt.secretkey
   aes:
-    secretKey: recordaccount.aes.secretkey
+    secretKey: sP9dF2mR4zL6yH7w

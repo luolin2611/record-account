@@ -5,14 +5,16 @@ import cn.rollin.exception.BizException;
 import cn.rollin.utils.Util;
 import cn.rollin.utils.cache.ICachaService;
 import com.google.code.kaptcha.Producer;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -31,12 +33,14 @@ import static cn.rollin.constant.Constant.USER_PATH;
  */
 @Slf4j
 @RestController
+@Api(tags = "验证码Controller")
 @RequestMapping(USER_PATH + "/checkcode")
 public class CheckCodeController {
-    @Autowired
+
+    @Resource
     private Producer captchaProducer;
 
-    @Autowired
+    @Resource
     @Qualifier(value = "redisCacheSerivce")
     private ICachaService cachaService;
 
@@ -51,6 +55,7 @@ public class CheckCodeController {
      * @param request  request
      * @param response response
      */
+    @ApiOperation("获取验证码(传入type： 0 - 表示登录、1 - 表示注册)")
     @GetMapping("/captcha")
     public void getCaptcha(HttpServletRequest request, HttpServletResponse response) {
         log.info("enter CheckCodeController#getCaptcha");

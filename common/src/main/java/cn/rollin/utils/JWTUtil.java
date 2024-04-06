@@ -82,7 +82,7 @@ public class JWTUtil {
      */
     public <T> T parseJwt(String jwtStr, Class<T> tClass) {
         try {
-            jwtStr = AESUtils.decrypt(jwtStr, aesSecretKey);
+            jwtStr = AESUtils.decrypt(jwtStr.replace(tokenPrefix, ""), aesSecretKey);
             Claims body = Jwts.parser()
                     .setSigningKey(jwtSecretKey)
                     .parseClaimsJws(jwtStr.replace(tokenPrefix, ""))

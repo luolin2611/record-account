@@ -71,6 +71,11 @@ public class UserDO implements Serializable {
     private String mobile;
 
     /**
+     * 创建时间
+     */
+    private Date createTime;
+
+    /**
      * 更新时间
      */
     private Date updateTime;

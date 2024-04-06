@@ -21,10 +21,14 @@ import static cn.rollin.constant.Constant.USER_PATH;
  *
  * @author rollin
  * @date 2024-03-30 15:31:08
- */@Configuration
+ */
+@Configuration
 @EnableOpenApi
 public class SwaggerConfiguration {
 
+    /**
+     * Swagger 开关
+     */
     @Value("${security.switchs.swaggerEnable}")
     private Boolean swaggerEnable;
 
@@ -76,12 +80,11 @@ public class SwaggerConfiguration {
                 //配置文档的元信息
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("net.xdclass"))
+                .apis(RequestHandlerSelectors.basePackage("cn.rollin"))
                 //正则匹配请求路径，并分配到当前项目组
                 .paths(PathSelectors.ant("/admin/**"))
                 .build();
     }
-
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
@@ -91,7 +94,6 @@ public class SwaggerConfiguration {
                 .version("v1.0")
                 .build();
     }
-
 
     /**
      * 配置全局通用参数
@@ -111,7 +113,6 @@ public class SwaggerConfiguration {
         return parameters;
 
     }
-
 
     /**
      * 生成通用的响应信息

@@ -35,18 +35,18 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         log.info("enter LoginInterceptor#preHandle");
-        String csrfToken = request.getHeader("csrfToken");
+        String token = request.getHeader("token");
 
-        // 校验是否传入csrfToken
-        if (StringUtils.isBlank(csrfToken)) {
-            log.error("The csrfToken is empty.");
+        // 校验是否传入token
+        if (StringUtils.isBlank(token)) {
+            log.error("The token is empty.");
             throw new BizException(ResStatusEnum.PARAMER_EXCEPTION);
         }
 
-        // 校验 csrfToken
-        LoginUser loginUser = jwtUtil.parseJwt(csrfToken, LoginUser.class);
+        // 校验 token
+        LoginUser loginUser = jwtUtil.parseJwt(token, LoginUser.class);
         if (ObjectUtils.isEmpty(loginUser)) {
-            log.error("The csrfToken verification failed.");
+            log.error("The token verification failed.");
             throw new BizException(ResStatusEnum.LOGIN_TIME_OUT);
         }
         threadLocal.set(loginUser);

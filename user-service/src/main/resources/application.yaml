@@ -42,6 +42,6 @@ security:
   login:
     accessTokenExpiration: 86400000 # AT 过期时间 - 1小时 = 3600000， 便于调试，此处暂时给出10天
   aes:
-    secretKey: recordaccount.aes.secretkey
+    secretKey: sP9dF2mR4zL6yH7w
   switchs:
     swaggerEnable: true # 定义Swagger开关，生产环境关闭
